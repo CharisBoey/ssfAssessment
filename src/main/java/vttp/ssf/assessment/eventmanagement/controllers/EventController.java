@@ -37,4 +37,5 @@ public class EventController {
 
 		return "view0";
 	}
+
 }
