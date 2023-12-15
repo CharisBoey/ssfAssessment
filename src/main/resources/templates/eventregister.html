@@ -16,7 +16,7 @@
         <h5 th:text="*{chosenEventName}"></h5>
         <h5 th:text="${#dates.format(chosenEventDate, 'dd-MM-yyyy')}"></h5>
         
-        <form method="POST" data-th-action="@{/events/registration/register}" data-th-object="${register}">
+        <form method="POST" data-th-action="@{/events/register/{eventId}}" data-th-object="${register}">
 			
 			<table>
 				<tr> 

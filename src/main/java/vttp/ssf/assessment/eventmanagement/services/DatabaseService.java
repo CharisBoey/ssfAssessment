@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.validation.FieldError;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
@@ -57,8 +56,6 @@ public class DatabaseService {
 
             Long longNum = num.longValue();
 
-            // Long date = Long.parseLong(indivEventContents.getString("eventDate"));
-            // retrievedEvent.setEventDate(date);
             retrievedEvent.setEventDate(longNum);
             retrievedEvent.setParticipants(indivEventContents.getInt("participants"));
 
@@ -74,9 +71,8 @@ public class DatabaseService {
         return true;
     }
 
-    public boolean sizeRequirement(int eventSize, int participantsAttended){
-        //5>4 still true but 5=5 cannot cuz max is filled
-        if(eventSize > participantsAttended){
+    public boolean sizeRequirement(int eventAvailability, int participantsDesired){
+        if(eventAvailability >= participantsDesired){
             return true;
         }
         else{

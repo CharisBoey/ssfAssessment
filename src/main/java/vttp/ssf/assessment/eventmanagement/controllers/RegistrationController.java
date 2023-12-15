@@ -34,6 +34,7 @@ public class RegistrationController {
     @Autowired
     DatabaseService databaseSvc;
 
+
     // TODO: Task 6
     @GetMapping("/register/{eventId}")
 	public String registerPage(Model model, @PathVariable("eventId") String eventId, HttpSession sess){
@@ -45,56 +46,64 @@ public class RegistrationController {
         model.addAttribute("chosenEvent", chosenEvent);
         model.addAttribute("chosenEventName", chosenEvent.getEventName());
         model.addAttribute("chosenEventDate", chosenEvent.getEventDate());
-        sess.setAttribute("chosenEventName", chosenEvent.getEventName());
-        sess.setAttribute("chosenEventDate", chosenEvent.getEventDate());
-        sess.setAttribute("chosenEventSize", chosenEvent.getEventSize());
-    
+        sess.setAttribute("indexInRedis", indexInRedis);
 		return "eventregister";
 	}
 
-    @PostMapping("/register")
-    // public ModelAndView registerProcessing(@Valid @ModelAttribute(register) Register register, BindingResult bindings, HttpSession sess,@RequestParam String username, @RequestBody String body) {
+    @PostMapping("/register/{eventId}")
     public String registerProcessing(@Valid @ModelAttribute("register") Register register, BindingResult bindings) {
         
         if (bindings.hasErrors()) {
         return "eventregister";
       }
     
-      return "redirect:/events/glad";
+      return "redirect:/events/registration/register";
     }
+
+    
 
     // TODO: Task 7
     @PostMapping("/registration/register")
     public String success(Model model, HttpSession sess, @ModelAttribute ("register") Register register){
 
-        String chosenEventName = (String) sess.getAttribute("chosenEventName");
-        Long chosenEventDate = (Long) sess.getAttribute("chosenEventDate");
+        Integer indexRedis = (Integer) sess.getAttribute("indexInRedis");
+        Event chosenEvent = redisRepo.getEvent(indexRedis);
+
+        String chosenEventName = chosenEvent.getEventName();
+        Long chosenEventDate = chosenEvent.getEventDate();
 
         model.addAttribute("chosenEventName", chosenEventName);
         model.addAttribute("chosenEventDate", chosenEventDate);
 
+        Integer chosenEventSize = chosenEvent.getEventSize();
+        Integer chosenEventParticipant = chosenEvent.getParticipants();
+        Integer chosenEventAvailability = chosenEventSize - chosenEventParticipant;
+
         Register registered = register;
-        int eventSize = (Integer) sess.getAttribute("chosenEventSize");
 
-        if(databaseSvc.ageRequirement(registered) && databaseSvc.sizeRequirement(eventSize, 3)){
-        return "SuccessRegistration";
-        }
+        if(databaseSvc.ageRequirement(registered) && databaseSvc.sizeRequirement(chosenEventAvailability, registered.getNoOfTicketsRequested())){
+            Event savedEvent = chosenEvent;
+            int totalTickets = chosenEventAvailability + registered.getNoOfTicketsRequested();
+            savedEvent.setParticipants(totalTickets);
+            redisRepo.replaceEvent(indexRedis, savedEvent);
+            return "SuccessRegistration";
+        } else {
 
-        if(!databaseSvc.ageRequirement(registered)){
-            String reason = "You did not meet the minimum age requirement.";
-            model.addAttribute("reason", reason);
-            return "ErrorRegistration";
-        }
-        if(!databaseSvc.sizeRequirement(eventSize, 3)){
-            String reason = "Your request for tickets exceeded the event size.";
-            model.addAttribute("reason", reason);
-            return "ErrorRegistration";
-        }
+            if(!databaseSvc.ageRequirement(registered)){
+                String reason = "You did not meet the minimum age requirement.";
+                model.addAttribute("reason", reason);
+                return "ErrorRegistration";
+            }
+            if(!databaseSvc.sizeRequirement(chosenEventSize, chosenEventParticipant)){
+                String reason = "Your request for tickets exceeded the event size.";
+                model.addAttribute("reason", reason);
+                return "ErrorRegistration";
+            }
+        } 
+        
 
         String reason = "Unknown Failure";
         model.addAttribute("reason", reason);
         return "ErrorRegistration";
     }
-
-    
 }
