@@ -27,7 +27,7 @@ public class EventController {
 		int noOfEvents = redisRepo.getNumberOfEvents();
 		//gg by id*
 		List<Event> eventList = new LinkedList<>();
-		for(int i=1; i<=noOfEvents; i++){
+		for(int i=0; i<noOfEvents; i++){
 			Event event = new Event();
 			event = redisRepo.getEvent(i);
 			eventList.add(event);
