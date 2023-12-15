@@ -58,8 +58,8 @@ public class EventmanagementApplication implements CommandLineRunner{
 		// Event event1 = redisRepo.getEvent(0);
 		// System.out.println("!!!!!!!!!!!!!!"+ event1.getEventName());
 
-		Event event2 = redisRepo.getEvent(1);
-		System.out.println("!!!!"+ event2.getEventName());
+		// Event event1 = redisRepo.getEvent(1);
+		// System.out.println("!!!!"+ event1.getEventName());
 
 	}
 

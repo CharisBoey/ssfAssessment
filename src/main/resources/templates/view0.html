@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Events</title>
+</head>
+<body>
+    <div class="container">
+        <br><br>
+        <h1>List of events</h1>
+
+        <table class="table table-striped">
+
+            <thead>
+                <tr>
+                    <th>Event ID</th>
+                    <th>Event Name</th>
+                    <th>Event Size</th>
+                    <th>Event Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--Creating links => <a th:href="@{Contact/{id}(id=${person.id})}" th:text="'Link to ' + ${person.name} + ' information'"></a> -->
+
+                <tr th:each="event: ${eventList}">
+                    <td th:text="*{event.eventId}"></td>
+                    <td th:text="*{event.eventName}"></td>
+                    <td th:text="*{event.eventSize}"></td>
+                    <td th:text="*{event.eventDate}"></td>
+                    <td th:text="*{event.participants}"></td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    
+
+    </div>
+</body>
+</html>
