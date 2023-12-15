@@ -13,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import vttp.ssf.assessment.eventmanagement.models.Event;
+import vttp.ssf.assessment.eventmanagement.repositories.RedisRepository;
 import vttp.ssf.assessment.eventmanagement.services.DatabaseService;
 
 @SpringBootApplication
@@ -20,6 +21,9 @@ public class EventmanagementApplication implements CommandLineRunner{
 
 	@Autowired
 	DatabaseService databaseSvc;
+
+	@Autowired
+	RedisRepository redisRepo;
 
 	public static void main(String[] args) {
 		SpringApplication.run(EventmanagementApplication.class, args);
@@ -31,9 +35,9 @@ public class EventmanagementApplication implements CommandLineRunner{
 		String pathFileName = "C:\\Users\\chari\\Desktop\\ssfAssessment\\";
 		String fileName = "events.json";
 		pathFileName = pathFileName+fileName;
-		
-		/* TO CHECK THAT DATA HAS BEEN PASSED!!!
-		List<Event> checkList = databaseSvc.readFile(pathFileName);
+
+		//TO CHECK THAT DATA HAS BEEN PASSED!!!
+		/* List<Event> checkList = databaseSvc.readFile(pathFileName);
 		
 		for(Event event: checkList){
 			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!()");
@@ -44,6 +48,18 @@ public class EventmanagementApplication implements CommandLineRunner{
 			System.out.println(event.getParticipants());
 			
 		} */
+
+		List<Event> eventListFromFile = databaseSvc.readFile(pathFileName);
+
+		for(Event event : eventListFromFile){
+			redisRepo.saveRecord(event);
+		}
+
+		// Event event1 = redisRepo.getEvent(0);
+		// System.out.println("!!!!!!!!!!!!!!"+ event1.getEventName());
+
+		Event event2 = redisRepo.getEvent(1);
+		System.out.println("!!!!"+ event2.getEventName());
 
 	}
 

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
+import jakarta.json.JsonNumber;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import vttp.ssf.assessment.eventmanagement.models.Event;
@@ -48,7 +49,14 @@ public class DatabaseService {
             retrievedEvent.setEventId(indivEventContents.getInt("eventId"));
             retrievedEvent.setEventName(indivEventContents.getString("eventName"));
             retrievedEvent.setEventSize(indivEventContents.getInt("eventSize"));
-            retrievedEvent.setEventDate(indivEventContents.getInt("eventDate"));
+            
+            JsonNumber num = indivEventContents.getJsonNumber("eventDate");
+
+            Long longNum = num.longValue();
+
+            // Long date = Long.parseLong(indivEventContents.getString("eventDate"));
+            // retrievedEvent.setEventDate(date);
+            retrievedEvent.setEventDate(longNum);
             retrievedEvent.setParticipants(indivEventContents.getInt("participants"));
 
             eventListFromFile.add(retrievedEvent);

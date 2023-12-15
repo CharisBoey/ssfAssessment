@@ -4,14 +4,14 @@ public class Event {
     private Integer eventId;
     private String eventName;
     private Integer eventSize;
-    private Integer eventDate;
+    private Long eventDate;
     private Integer participants;
 
     public Event(){
 
     }
 
-    public Event(Integer eventId, String eventName, Integer eventSize, Integer eventDate, Integer participants) {
+    public Event(Integer eventId, String eventName, Integer eventSize, Long eventDate, Integer participants) {
         this.eventId = eventId;
         this.eventName = eventName;
         this.eventSize = eventSize;
@@ -39,10 +39,10 @@ public class Event {
     public void setEventSize(Integer eventSize) {
         this.eventSize = eventSize;
     }
-    public Integer getEventDate() {
+    public Long getEventDate() {
         return eventDate;
     }
-    public void setEventDate(Integer eventDate) {
+    public void setEventDate(Long eventDate) {
         this.eventDate = eventDate;
     }
     public Integer getParticipants() {
