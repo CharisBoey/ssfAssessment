@@ -6,10 +6,12 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.validation.FieldError;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
@@ -17,6 +19,7 @@ import jakarta.json.JsonNumber;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import vttp.ssf.assessment.eventmanagement.models.Event;
+import vttp.ssf.assessment.eventmanagement.models.Register;
 
 @Service
 public class DatabaseService {
@@ -63,4 +66,22 @@ public class DatabaseService {
         }
         return eventListFromFile;
     }
+
+    public boolean ageRequirement(Register register){
+        if(register.getBirthDate().isAfter(LocalDate.now().minusYears(21))){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean sizeRequirement(int eventSize, int participantsAttended){
+        //5>4 still true but 5=5 cannot cuz max is filled
+        if(eventSize > participantsAttended){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 }

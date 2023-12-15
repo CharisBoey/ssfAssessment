@@ -27,11 +27,13 @@
                     <td th:text="*{event.eventId}"></td>
                     <td th:text="*{event.eventName}"></td>
                     <td th:text="*{event.eventSize}"></td>
-                    <!-- <td th:text="*{event.eventDate}"></td> -->
                     <td th:text="${#dates.format(event.eventDate, 'dd-MM-yyyy')}"></td>
                     <td>
-                        <a th:href="@{/events/register}" class="btn btn-secondary">Register</a>
+                        <!-- <a th:href="@{/events/register}" class="btn btn-secondary">Register</a> -->
+                        <a th:href="@{/events/register/{eventId}(eventId=${event.eventId})}" class="btn btn-secondary">Register</a>
                     </td>
+
+                    
                 </tr>
             </tbody>
         </table>

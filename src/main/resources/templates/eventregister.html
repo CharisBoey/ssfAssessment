@@ -13,10 +13,10 @@
         <br>
         <p>You have chosen to register for the following event:</p>
 
-        <h5>NAME EDIT!!</h5>
-        <h5>DATE EDIT!!</h5>
-
-        <form method="POST" data-th-action="@{/events/register}" data-th-object="${register}">
+        <h5 th:text="*{chosenEventName}"></h5>
+        <h5 th:text="${#dates.format(chosenEventDate, 'dd-MM-yyyy')}"></h5>
+        
+        <form method="POST" data-th-action="@{/events/registration/register}" data-th-object="${register}">
 			
 			<table>
 				<tr> 
